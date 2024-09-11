@@ -9,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  post = 10;
+  followers = 5;
+  requests = 250;
+
 }
