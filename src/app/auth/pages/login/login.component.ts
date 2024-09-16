@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { User } from '../../interfaces/user.interface';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule} from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -13,18 +14,14 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 })
 export class LoginComponent {
 
-  user:User = {
-    userName: '',
-    email:'',
-    password: ''
-  };
 
   loginForm = this.fb.group({
-    userName:['bela'],
-    password:['123']
-  }
+    userName:['', [Validators.required]],
+    password:['', [Validators.required]]
+  });
 
-  );
+
+  userService = new UserService();
 
   constructor(private fb:FormBuilder, private router:Router){
 
@@ -32,26 +29,33 @@ export class LoginComponent {
 
   onLogin(){
 
+    if(!this.loginForm.valid){  
+      Swal.fire({
+        title: "Error",
+        text: "Diligencia todos los campos",
+        icon: "warning"
+      });
+      return;
+
+    }
+
     let userName = this.loginForm.value.userName;
     let password = this.loginForm.value.password;
 
-    if (!userName || !password){
-      alert('Debe diligenciar los campos');
+
+    const response = this.userService.login({userName:userName!, password:password!});
+
+    if(response.success){
+      this.router.navigateByUrl('/home')
+    }else{
+      Swal.fire({
+        text: response.message,
+        icon: "error"
+      });
       return;
-    }
-    const storedPassword = localStorage.getItem(userName.toLowerCase());
-
-    if (storedPassword == null) {
-      alert('Usuario no registrado')
-    }else if (storedPassword == password) {
-      alert('Exitoso');
-      this.router.navigateByUrl("/home")
-    } else {
-      alert('Contraseña incorrecta');
+      
     }
 
-
-  
   }
 
 }

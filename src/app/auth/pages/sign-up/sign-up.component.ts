@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,40 +14,57 @@ import { Router, RouterLink } from '@angular/router';
 export class SignUpComponent {
 
   signUpForm = this.fb.group({
-    email: [''],
-    userName:['',],
-    password:[''],
-    confirmPassword: ['']
+    email: ['', [Validators.required]],
+    userName:['',[Validators.required]],
+    password:['', [Validators.required]],
+    confirmPassword: ['', [Validators.required]]
   });
+
+  userService = new UserService();
 
   constructor(private fb: FormBuilder, private router: Router) {
 
   }
 
   onRegister() {
-    let email = this.signUpForm.value.email;
-    let userName = this.signUpForm.value.userName;
-    let password = this.signUpForm.value.password;
-    let confirmPassword = this.signUpForm.value.confirmPassword;
-  
-  
-    if (!userName || !password || !email || !confirmPassword) {
-      alert('Debe diligenciar todos los campos');
+    if(!this.signUpForm.valid){  
+      Swal.fire({
+        title: "Error",
+        text: "Diligencia todos los campos",
+        icon: "warning"
+      });
+      return;
+
+    }
+
+    const userName = this.signUpForm.value.userName;
+    const password = this.signUpForm.value.password;
+    const email = this.signUpForm.value.email;
+    const confirmPassword = this.signUpForm.value.confirmPassword;
+
+    if(password !== confirmPassword){
+      Swal.fire({
+        title: "Error",
+        text: "Las contraseñas no coinciden",
+        icon: "error"
+      });
       return;
     }
-  
-    if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
+
+    const response = this.userService.register({userName:userName!, password: password!, email: email!});
+
+    if(response.success){
+      this.router.navigateByUrl('/home')
+    }else{
+      Swal.fire({
+        text: response.message,
+        icon: "info"
+      });
       return;
+      
     }
-  
-    if (localStorage.getItem(userName)) {
-      alert('El usuario ya existe');
-      return;
-    }
-  
-    localStorage.setItem(userName, password);
-    this.router.navigateByUrl('/home');
+
+
   }
   
   
