@@ -12,30 +12,22 @@
 <section id="profile">
     <div>
         <img src="/assets/avatar_1.jpg" alt="">
-        <span>Peter Parker</span>
+        <span id="UserName">{{currentUser.email}}</span>
     </div>
     <div>
-        <span>60</span>
+        <span>{{followers}}</span>
         <span>Seguidores</span>
     </div>
     <div>
-        <span>6</span>
+        <span>{{posts}}</span>
         <span>Publicaciones</span>
     </div>
     <div>
-        <span>7</span>
+        <span>{{requests}}</span>
         <span>Solicitudes</span>
     </div>
 </section>
 
 <section id="gallery">
-        <img src="/assets/image_1.jpg"/>
-        <img src="/assets/image_2.jpg"/>
-        <img src="/assets/image_3.jpg"/>
-        <img src="/assets/image_4.jpg"/>
-        <img src="/assets/image_5.jpg"/>
-        <img src="/assets/image_6.jpg"/>
-        <img src="/assets/image_1.jpg"/>
-        <img src="/assets/image_2.jpg"/>
-
+    <img [src]="item.url" *ngFor="let item of galleryItems()" />
 </section>

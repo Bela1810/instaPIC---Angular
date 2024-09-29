@@ -1,44 +1,66 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
 import { LoginResponse, SignUpResponde } from '../interfaces/login-response.interface';
+import { UserDBService } from './user.db.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
-
-  login(user: User):LoginResponse{
-
-    const storedPassword = localStorage.getItem(user.userName.toLowerCase());
-
-    if (storedPassword !== user.password) {
-      return{
-        success:false,
-        message: 'Usuario o contraseña incorrecta'
-      }
-    }
-    return{
-      success: true,
-    }
+  constructor(private service:UserDBService){
 
   }
 
-  register(user:User): SignUpResponde{
+  currentUser = signal<User>({userName:'',password:'', email:''});
 
-    if(localStorage.getItem(user.userName!.trim().toLowerCase())){
-      return{
+  login(userName: string, password: string) :LoginResponse{
+    const userSrt = localStorage.getItem(userName.toLowerCase().trim());
+    if(!userSrt){
+      return {
         success: false,
-        message: 'Usuario ya Existe'
+        message: 'Usuario o contraseña incorrectos'
       }
     }
-    
-    /**userName!: la variable no es null ni undefined */
-    localStorage.setItem(user.userName!.trim().toLowerCase(),user.password!);
-    return{
+    const user:User = JSON.parse(userSrt);
+    if (user.password !== password) {
+      return {
+        success: false,
+        message: 'Usuario o contraseña incorrectos'
+      }
+    }
+    this.setUser(user);
+    return {
       success: true
     }
 
   }
+
+  
+  register(user:User): SignUpResponde{
+    if (localStorage.getItem(user.userName.toLowerCase().trim())) {
+      return {
+        success: false,
+        message: 'Usuario ya existe'
+      }
+    }
+    const userSrt = JSON.stringify(user);
+    localStorage.setItem(user.userName.toLowerCase().trim(), userSrt);
+    this.setUser(user);
+    return {
+      success: true
+    }
+  }
+
+  private setUser(user:User){
+    this.currentUser.set(user);
+  }
+
+  getUser(){
+    return this.currentUser();
+  }
+
 }
+
+
+

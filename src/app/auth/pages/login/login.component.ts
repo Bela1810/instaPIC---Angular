@@ -21,39 +21,32 @@ export class LoginComponent {
   });
 
 
-  userService = new UserService();
-
-  constructor(private fb:FormBuilder, private router:Router){
+  constructor(private fb:FormBuilder, private router:Router, private userService: UserService){
 
   }
 
   onLogin(){
 
-    if(!this.loginForm.valid){  
+    console.log(this.loginForm);
+    if (!this.loginForm.valid) {
       Swal.fire({
-        title: "Error",
-        text: "Diligencia todos los campos",
-        icon: "warning"
+        title:'Ingreso',
+        text:'Debe diligenciar todos los campos',
+        icon:'error'
       });
       return;
-
     }
-
-    let userName = this.loginForm.value.userName;
-    let password = this.loginForm.value.password;
-
-
-    const response = this.userService.login({userName:userName!, password:password!});
-
+    let userName = this.loginForm.value.userName||'';
+    let password = this.loginForm.value.password||'';
+    let response = this.userService.login(userName, password);
     if(response.success){
-      this.router.navigateByUrl('/home')
+      this.router.navigateByUrl('/home');
     }else{
       Swal.fire({
-        text: response.message,
-        icon: "error"
+        title:'Ingreso',
+        text:response.message,
+        icon:'error'
       });
-      return;
-      
     }
 
   }

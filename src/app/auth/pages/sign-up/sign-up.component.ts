@@ -20,9 +20,8 @@ export class SignUpComponent {
     confirmPassword: ['', [Validators.required]]
   });
 
-  userService = new UserService();
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private userService:UserService) {
 
   }
 
