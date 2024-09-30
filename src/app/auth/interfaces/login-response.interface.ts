@@ -3,7 +3,7 @@ export interface LoginResponse{
     message?: string;
 }
 
-export interface SignUpResponde extends LoginResponse{
+export interface SignUpResponse extends LoginResponse{
     
 }
 

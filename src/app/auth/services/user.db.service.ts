@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
-import { LoginResponse, SignUpResponde } from '../interfaces/login-response.interface';
+import { LoginResponse, SignUpResponse } from '../interfaces/login-response.interface';
 
 @Injectable({
   providedIn: 'root'

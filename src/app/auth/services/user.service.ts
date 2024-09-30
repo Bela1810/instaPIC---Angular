@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
-import { LoginResponse, SignUpResponde } from '../interfaces/login-response.interface';
+import { LoginResponse, SignUpResponse } from '../interfaces/login-response.interface';
 import { UserDBService } from './user.db.service';
 
 @Injectable({
@@ -8,11 +8,8 @@ import { UserDBService } from './user.db.service';
 })
 export class UserService {
 
-  constructor(private service:UserDBService){
 
-  }
-
-  currentUser = signal<User>({userName:'',password:'', email:''});
+  userSignal = signal<User>({userName:'', password:'', email:''});
 
   login(userName: string, password: string) :LoginResponse{
     const userSrt = localStorage.getItem(userName.toLowerCase().trim());
@@ -36,8 +33,12 @@ export class UserService {
 
   }
 
-  
-  register(user:User): SignUpResponde{
+  logout(){
+    this.userSignal.set({userName:'',password:'',email:''});
+    localStorage.removeItem('loggedUser');
+  }
+
+  register(user:User): SignUpResponse{
     if (localStorage.getItem(user.userName.toLowerCase().trim())) {
       return {
         success: false,
@@ -53,11 +54,17 @@ export class UserService {
   }
 
   private setUser(user:User){
-    this.currentUser.set(user);
+    localStorage.setItem('loggedUser', JSON.stringify(user));
+    this.userSignal.set(user);
   }
 
   getUser(){
-    return this.currentUser();
+    const userSrt = localStorage.getItem('loggedUser');
+    if(userSrt){
+      const user = JSON.parse(userSrt);
+      this.userSignal.set(user);
+    }
+    return this.userSignal;
   }
 
 }

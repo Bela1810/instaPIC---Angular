@@ -12,14 +12,16 @@
 <section id="profile">
     <div>
         <img src="/assets/avatar_1.jpg" alt="">
-        <span id="UserName">{{currentUser.email}}</span>
+        <span id="userName">{{currentUser().email}}</span>
     </div>
     <div>
         <span>{{followers}}</span>
         <span>Seguidores</span>
     </div>
     <div>
-        <span>{{posts}}</span>
+        <span>
+            {{galleryItems().length}}
+        </span>
         <span>Publicaciones</span>
     </div>
     <div>
@@ -29,5 +31,12 @@
 </section>
 
 <section id="gallery">
-    <img [src]="item.url" *ngFor="let item of galleryItems()" />
-</section>
+    <div class="gallery-item" *ngFor="let item of galleryItems()">
+      <img [src]="item.url" />
+      <div class="comments">
+        <input type="text" (change)="onAddComment($event, item.id)"/>
+        <a (click)="onViewComments(item.comments)"><i class="fas fa-comments"></i></a>
+        <a (click)="onDelete(item.id)"><i class="fas fa-trash-alt"></i></a>
+      </div>
+    </div>
+  </section>

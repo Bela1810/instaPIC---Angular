@@ -183,19 +183,61 @@ ul li:first-child{
     justify-content: center;
     padding: 20px;
 }
-
+  
+#gallery .gallery-item{
+    display: flex;
+    flex-direction: column;
+}
+  
 #gallery img{
-    vertical-align:middle;
+    flex:1;
     width: 300px;
-    margin: 20px;
+    margin: 0 20px;
     padding: 5px;
-    opacity: 1;
     border: 1px solid #fff;
 }
-
+  
 #gallery img:hover{
-    border: 1px solid #fb8500;
+    border-color:#fb8500;
     opacity: 0.7;
+}
+
+.comments{
+    display: flex;
+    width: 320px;
+    justify-content: space-between;
+}
+
+.comments input, .comments a{
+    margin:10px;
+    color:#fb8500;
+}
+  
+.comments a:hover{
+    color:#d00000;
+    cursor: pointer;
+}
+  
+.comments input{
+    flex: 1;
+    margin-left: 30px;
+    background-color: #ffffff;
+    border: 1px solid #219ebc;
+    color: #023047;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: 12px;
+}
+  
+.comments input:focus {
+    border-color: #fb8500;
+    outline: none;
+}
+  
+.social-icons li + li{
+    margin-left: 50px;
 }
 
 

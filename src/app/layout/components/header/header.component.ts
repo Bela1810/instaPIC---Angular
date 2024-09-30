@@ -1,13 +1,25 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../../auth/services/user.service';
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+
+  user;
+  constructor(private router:Router, private userService:UserService){
+    this.user=userService.getUser();
+  }
+
+  logout(){
+    this.userService.logout();
+    this.router.navigateByUrl('');
+  }
 
 }
