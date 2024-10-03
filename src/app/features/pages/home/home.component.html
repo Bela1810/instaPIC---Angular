@@ -11,7 +11,7 @@
 </head>
 <section id="profile">
     <div>
-        <img src="/assets/avatar_1.jpg" alt="">
+        <img [src]="profilePhoto || '/assets/new_user.jpg'" alt="">
         <span id="userName">{{user().email}}</span>
     </div>
     <div>

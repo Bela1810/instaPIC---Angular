@@ -98,6 +98,15 @@ export class UserService {
     return [];
   }
 
+  saveProfile(profileUrl:string, userName: string){
+    localStorage.setItem(`profile-${userName}`, profileUrl);
+
+  }
+
+  getProfile(userName:string){
+    return localStorage.getItem(`profile-${userName}`)||'';
+
+  }
 
 }
 

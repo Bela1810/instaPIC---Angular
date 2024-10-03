@@ -16,14 +16,14 @@ export class PostsService {
     );
   }
 
-  async uploadFile(file: File, userName: string, fileName: string){
+  async uploadFile(file: File, userName: string, fileName: string, bucket: string){
 
-    const { error } = await this.supabase.storage.from('my-pics').upload(`${userName}/${fileName}`, file);
+    const { error } = await this.supabase.storage.from(bucket).upload(`${userName}/${fileName}`, file);
     if(error){
       throw error;
     }
 
-    const { data } = await this.supabase.storage.from('my-pics').getPublicUrl(`${userName}/${fileName}`)
+    const { data } = await this.supabase.storage.from(bucket).getPublicUrl(`${userName}/${fileName}`)
     return data.publicUrl;
   }
 

@@ -40,7 +40,7 @@ export class NewPostComponent {
       return;
     }
     const file:File = input.files![0];
-    this.postsService.uploadFile(file,this.user().userName, fileName)
+    this.postsService.uploadFile(file,this.user().userName, fileName, 'my-pics')
     .then(response =>{
       console.log(response);
       this.uploadedUrl = response;

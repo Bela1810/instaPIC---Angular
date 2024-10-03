@@ -22,10 +22,12 @@ export class HomeComponent {
 
   galleryItems = signal<GalleryItem[]>([]);
 
+  profilePhoto = '';
 
   constructor(private userService: UserService){
     this.user = userService.getUser();
     this.galleryItems.set(this.userService.getGallery(this.user().userName));
+    this.profilePhoto = this.userService.getProfile(this.user().userName);
   }
 
   onDelete(id: string) {
