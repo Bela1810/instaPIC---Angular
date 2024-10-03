@@ -16,17 +16,18 @@ export class PostsService {
     );
   }
 
-  async uploadFile(file:File, fileName:string, folderName:string = 'base'){
-    const { error } = await this.supabase.storage.from('my-pics').upload(`${folderName}/${fileName}`, file);
+  async uploadFile(file: File, userName: string, fileName: string){
+
+    const { error } = await this.supabase.storage.from('my-pics').upload(`${userName}/${fileName}`, file);
     if(error){
-      console.log(error);
-      return;
+      throw error;
     }
 
-    const { data } = await this.supabase.storage.from('instapic')
-      .getPublicUrl(`${folderName}/${fileName}`)
+    const { data } = await this.supabase.storage.from('my-pics').getPublicUrl(`${userName}/${fileName}`)
     return data.publicUrl;
   }
+
+  
 
 }
   

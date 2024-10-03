@@ -18,26 +18,17 @@ export class HomeComponent {
   followers = 5;
   requests = 250;
 
-  currentUser;
+  user;
 
-  galleryItems = signal<GalleryItem[]>([
-    {id:1, url:"/assets/image_1.jpg", comments: []},
-    {id:2, url:"/assets/image_2.jpg", comments: []},
-    {id:3, url:"/assets/image_3.jpg", comments: []},
-    {id:4, url:"/assets/image_4.jpg", comments: []},
-    {id:5, url:"/assets/image_5.jpg", comments: []},
-    {id:6, url:"/assets/image_6.jpg", comments: []},
-    {id:7, url:"/assets/image_1.jpg", comments: []},
-    {id:8, url:"/assets/image_2.jpg", comments: []}
-
-  ]);
+  galleryItems = signal<GalleryItem[]>([]);
 
 
   constructor(private userService: UserService){
-    this.currentUser = userService.getUser();
+    this.user = userService.getUser();
+    this.galleryItems.set(this.userService.getGallery(this.user().userName));
   }
 
-  onDelete(id: number) {
+  onDelete(id: string) {
     Swal.fire({
       text: "¿Está seguro de eliminar la imagen seleccionada?",
       icon: "warning",
@@ -46,38 +37,38 @@ export class HomeComponent {
       confirmButtonColor: "#023047",
       cancelButtonColor: "#d00000",
       confirmButtonText: "Si",
-      cancelButtonText:"No"      
+      cancelButtonText:"No"
     }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "Borrado!",
-            text: "Tu foto ha sido borrada",
-            icon: "success"
-          })
-          this.galleryItems.update(items =>
-            items.filter(item => item.id !== id)
-          );
-        }
+      if (result.isConfirmed) {
+        this.galleryItems.update(items =>
+          items.filter(item => item.id !== id)
+        );
+        this.userService.updateGallery(this.user().userName, this.galleryItems());
+
+      }
     });
+
   }
 
 
-  onAddComment(event: Event, id:number){
-      const input = event.target as HTMLInputElement;
-      const newComment = input.value;
-      console.log(newComment);
-      if(newComment){
-        this.galleryItems.update(items=> {
-          let selected = items.find(item=>item.id===id);
-          selected!.comments=[...selected!.comments, newComment];
-          return items;
-      });
+  onAddComment(event:Event, id:string){
+    const input = event.target as HTMLInputElement;
+    if(!input.value){
+      return;
     }
-
-    input.value='';
+    this.galleryItems.update(items=> {
+      let selected = items.find(item=>item.id===id);
+      if(selected){
+        selected.comments = [...selected.comments, input.value]
+      }
+      return items;
+    })
+    this.userService.updateGallery(this.user().userName, this.galleryItems());
+    input.value = '';
   }
 
-  onViewComments(comments:string[]){
+  onViewComments(comments: string[]) {
+
     let htmlContent = 'Aún no hay comentarios, se el primero!';
     if(comments.length>0){
       htmlContent = '<div>';

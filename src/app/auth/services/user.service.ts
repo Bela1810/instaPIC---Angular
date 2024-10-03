@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
 import { LoginResponse, SignUpResponse } from '../interfaces/login-response.interface';
 import { UserDBService } from './user.db.service';
+import { GalleryItem } from '../../features/interfaces/gallery-item.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,37 @@ export class UserService {
     }
     return this.userSignal;
   }
+
+
+  updateGallery(userName:string, gallery:GalleryItem[]){
+    localStorage.setItem(`imgs-${userName}`, JSON.stringify(gallery));
+  }
+
+  saveImage(id:string, url:string, userName:string){
+    const newImage:GalleryItem = {
+      id,
+      url,
+      comments:[]
+    }
+    let galleryStr = localStorage.getItem(`imgs-${userName}`);
+    if(galleryStr){
+      let gallery = JSON.parse(galleryStr);
+      gallery = [...gallery, newImage];
+      localStorage.setItem(`imgs-${userName}`, JSON.stringify(gallery));
+    }else{
+      localStorage.setItem(`imgs-${userName}`,JSON.stringify([newImage]));
+    }
+  }
+
+
+  getGallery(userName:string):GalleryItem[]{
+    let galleryStr = localStorage.getItem(`imgs-${userName}`);
+    if(galleryStr){
+      return JSON.parse(galleryStr);
+    }
+    return [];
+  }
+
 
 }
 
