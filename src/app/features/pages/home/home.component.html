@@ -9,6 +9,7 @@
 
     <title>InstaPIC</title>
 </head>
+
 <section id="profile">
     <div>
         <img [src]="profilePhoto || '/assets/new_user.jpg'" alt="">
@@ -31,6 +32,12 @@
 </section>
 
 <section id="gallery">
+
+    <div class="no-posts" *ngIf="galleryItems().length === 0" class="no-posts">
+        <img src="/assets/no-posts.jpg" alt="">
+        <p>Aún no tienes publicaciones</p>
+    </div>
+
     <div class="gallery-item" *ngFor="let item of galleryItems()">
       <img [src]="item.url" />
       <div class="comments">

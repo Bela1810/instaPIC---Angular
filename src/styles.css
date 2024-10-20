@@ -189,15 +189,15 @@ ul li:first-child{
     flex-direction: column;
 }
   
-#gallery img{
+.gallery-item img{
     flex:1;
-    width: 300px;
+    width: 350px;
     margin: 0 20px;
     padding: 5px;
     border: 1px solid #fff;
 }
   
-#gallery img:hover{
+.gallery-item img:hover{
     border-color:#fb8500;
     opacity: 0.7;
 }
