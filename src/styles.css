@@ -127,11 +127,6 @@ footer > ul > li + li{    /* adyacente: tenga un anterior*/
 
 }
 
-#profile div span:first-child{
-    font-size: 1.8em;
-    font-weight: 900;
-}
-
 #profile img{
     width: 100px;
     border-radius: 50px;
@@ -146,7 +141,24 @@ footer > ul > li + li{    /* adyacente: tenga un anterior*/
 
 #profile div span{
     display: block;
+    text-align: center;
+    padding: 20px;
+    align-items: center;
 }
+
+#text-span{
+    font-size: large;
+    position: relative;
+    top: -30px;
+}
+
+
+#profile div span:first-child{
+    font-size: 1.8em;
+    font-weight: 900;
+
+}
+
 
 nav ul{
     list-style: none;
