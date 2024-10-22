@@ -204,6 +204,7 @@ ul li:first-child{
 .gallery-item img{
     flex:1;
     width: 350px;
+    height: 350px;
     margin: 0 20px;
     padding: 5px;
     border: 1px solid #fff;

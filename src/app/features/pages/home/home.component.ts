@@ -4,11 +4,14 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { GalleryItem } from '../../interfaces/gallery-item.interface';
 import { RouterLink } from '@angular/router';
+import { ImagenComponent } from '../../../control/imagen/imagen.component';
+
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule , RouterLink],
+  imports: [CommonModule , RouterLink, ImagenComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -29,6 +32,7 @@ export class HomeComponent {
     this.galleryItems.set(this.userService.getGallery(this.user().userName));
     this.profilePhoto = this.userService.getProfile(this.user().userName);
   }
+
 
   onDelete(id: string) {
     Swal.fire({

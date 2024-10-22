@@ -38,12 +38,17 @@
         <p>Aún no tienes publicaciones</p>
     </div>
 
+    
     <div class="gallery-item" *ngFor="let item of galleryItems()">
-      <img [src]="item.url" />
-      <div class="comments">
-        <input type="text" (change)="onAddComment($event, item.id)"/>
-        <a (click)="onViewComments(item.comments)"><i class="fas fa-comments"></i></a>
-        <a (click)="onDelete(item.id)"><i class="fas fa-trash-alt"></i></a>
+        <app-imagen
+          [ImageUrl]="item.url" 
+          [ImageId]="item.id" 
+          [comments]="item.comments"
+          (addComment)="onAddComment($event, item.id)"
+          (deleteComment)="onDelete(item.id)"
+          (viewComments)="onViewComments(item.comments)">
+        </app-imagen>
       </div>
-    </div>
+      
+      
   </section>

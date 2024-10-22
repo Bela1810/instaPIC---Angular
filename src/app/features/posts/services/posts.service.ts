@@ -27,6 +27,15 @@ export class PostsService {
     return data.publicUrl;
   }
 
+  async deleteFile(filePath: string, bucket: string) {
+
+    const { error } = await this.supabase.storage.from(bucket).remove([filePath]);
+    if (error) {
+      throw error;  
+    }
+    return true;  
+  }
+
   
 
 }

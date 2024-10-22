@@ -15,39 +15,72 @@ export class ProfileComponent {
 
   user;
   uploadedUrl='';
+  selectedFile: File | null = null;
+  previousProfileUrl: string | null = '';
 
   constructor(private postsService:PostsService, private userService:UserService){
     this.user = userService.getUser();
+    this.previousProfileUrl = this.userService.getProfile(this.user().userName) || null;
 
   }
 
-  async onUploadPhoto(event:Event){
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];  
+    }
+  }
+  
+
+  async onUploadPhoto() {
+
+    if (!this.selectedFile) {
+      Swal.fire('Error', 'Por favor selecciona un archivo antes de guardar los cambios', 'error');
+      return;
+    }
+  
     Swal.fire({
       title: 'Cargando...',
       text: 'Por favor espera',
       allowOutsideClick: false,
       didOpen: () => {
-        Swal.showLoading(); 
+        Swal.showLoading();
       }
     });
+  
     const fileName = uuidv4();
-    const input= event.target as HTMLInputElement;
-    if(input.files!.length <= 0){
+
+    if (!this.selectedFile) {
+      Swal.close();
       return;
     }
-    const file:File = input.files![0];
-    this.postsService.uploadFile(file,this.user().userName, fileName, 'profile')
-    .then(response =>{
-      console.log(response);
+  
+
+    if (this.previousProfileUrl) {
+      const urlParts = this.previousProfileUrl.split('/');
+      const userName = this.user().userName; 
+      const fileName = urlParts.pop(); 
+      const filePath = `${userName}/${fileName}`; 
+  
+      if (filePath) {
+          const deleteResponse = await this.postsService.deleteFile(filePath, 'profile'); 
+          console.log('Delete response:', deleteResponse);
+      }
+  }
+  
+    try {
+      const response = await this.postsService.uploadFile(this.selectedFile, this.user().userName, fileName, 'profile');
       this.uploadedUrl = response;
       this.userService.saveProfile(this.uploadedUrl, this.user().userName);
       Swal.close();
-    }).catch(error=>{
-      Swal.close();
-        Swal.fire('Error', error.message, 'error');
-    });
-    
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Ocurrió un error desconocido';
+      Swal.fire('Error', errorMessage, 'error');
+    }
+
+
   }
+  
 
   
 
